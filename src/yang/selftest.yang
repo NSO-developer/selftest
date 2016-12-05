@@ -1,0 +1,134 @@
+module selftest {
+
+  namespace "http://cisco.com/self-test-action";
+  prefix selftest;
+
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+
+  import tailf-common {
+    prefix tailf;
+  }
+
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  import ietf-yang-types {
+    prefix ietf;
+  }
+
+  description "adds live-status exec commands to check the live status of your services";
+
+  revision 2016-12-05 {
+    description
+      "Renamed package to selftest
+       hniska@cisco.com";
+  }
+
+  revision 2016-10-20 {
+    description
+      "Rewrite v2.1
+       hniska@cisco.com";
+  }
+
+  revision 2016-09-20 {
+    description
+      "Rewrite v2
+       hniska@cisco.com";
+  }
+
+  revision 2016-09-14 {
+    description
+      "Initial revision.
+       hniska@cisco.com";
+  }
+
+  //This grouping should be used in your service.
+  grouping selftest-result {
+    container selftest-result {
+      tailf:info "last results for the service selftest action";
+      config false;
+      list command {
+          key name;
+          leaf name {
+              type string;
+              config false;
+          }
+          leaf result {
+              type string;
+              config false;
+          }
+          leaf time {
+              type string;
+              config false;
+          }
+      }
+    }
+  }
+
+  list selftest {
+      key name;
+      leaf name {
+          type string;
+      }
+
+      leaf service {
+          type ietf:xpath1.0;
+          mandatory true;
+          tailf:info "Path to the service where the selftest result will be stored";
+      }
+
+      tailf:action execute {
+        tailf:actionpoint selftest;
+        input {
+          leaf command {
+            mandatory true;
+            type leafref {
+                path ../../commands/name;
+            }
+          }
+        }
+        output {
+          leaf result {
+            type string;
+          }
+        }
+      }
+
+      list commands {
+        key name;
+        leaf name {
+            type string;
+        }
+        leaf-list devices {
+            min-elements 1;
+            type leafref {
+                path /ncs:devices/ncs:device/ncs:name;
+            }
+        }
+
+        leaf command {
+            mandatory true;
+            type enumeration {
+              enum ping;
+              enum show;
+              enum copy;
+              enum any;
+            }
+        }
+
+        leaf arguments {
+            mandatory true;
+            type string;
+        }
+
+        leaf failstring {
+            type string;
+            tailf:info "regular expression for a fail result";
+        }
+      }
+  }
+}

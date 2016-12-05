@@ -1,0 +1,12 @@
+<ncs-package xmlns="http://tail-f.com/ns/ncs-packages">
+  <name>selftest</name>
+  <package-version>1.3</package-version>
+  <description>Service selftest package</description>
+  <ncs-min-version>4.2</ncs-min-version>
+  <component>
+    <name>selftest</name>
+    <application>
+      <python-class-name>selftest.Selftest</python-class-name>
+    </application>
+  </component>
+</ncs-package>
