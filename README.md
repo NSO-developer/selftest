@@ -1,0 +1,2 @@
+# selftest
+Service selftest package.
