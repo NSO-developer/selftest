@@ -206,3 +206,7 @@ NAME                RESULT  TIME
 local-if-line-status-ce0  OK      2016-10-26 14:52:17
 local-if-line-status-ce2  FAIL    2016-10-26 14:52:18
 ```
+
+### Contact
+
+Contact Hakan Niska <hniska@cisco.com> with any suggestions or comments. If you find any bugs please fix them and send me a pull request.
