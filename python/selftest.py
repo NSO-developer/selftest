@@ -33,10 +33,7 @@ class RunAction(Action):
 def set_status(service, command, status):
     # set the operational values status and time.
     if hasattr(service, 'selftest_result'):
-        if not service.selftest_result.command.exists(command):
-            cmd_result = service.selftest_result.command.create(command)
-        else:
-            cmd_result = service.selftest_result.command[command]
+        cmd_result = service.selftest_result.command.create(command)
         cmd_result.result = status
         cmd_result.time = strftime("%Y-%m-%d %H:%M:%S")
     else:
