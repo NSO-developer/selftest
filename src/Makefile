@@ -7,6 +7,7 @@ SRC = $(wildcard yang/*.yang)
 FXS = $(SRC:yang/%.yang=../load-dir/%.fxs)
 
 YANGPATH = --yangpath yang --yangpath ../../l3vpn/src/yang
+#--yangpath /Users/hniska/ncs/junos-ncs/packages/juniper-junos/src/ncsc-out/modules/yang
 
 fxs:	$(FXS)
 

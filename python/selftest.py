@@ -105,6 +105,12 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
                 action_input = device.live_status.vrp_stats__exec[command].get_input()
                 action_input.args = input_args
                 output = device.live_status.vrp_stats__exec[command](action_input)
+            elif module.name == 'junos-rpc':
+                self.log.info(device_name, ' is a juniper-junos device')
+                action_input = device.live_status.vrp_stats__exec[command].get_input()
+                action_input.args = input_args
+                output = device.live_status.vrp_stats__exec[command](action_input)
+
         except Exception, e:
             self.log.info(device_name, " ERROR: ", str(e))
             error_string = "ERROR: " + str(e)

@@ -22,6 +22,12 @@ module selftest {
 
   description "adds live-status exec commands to check the live status of your services";
 
+  revision 2017-01-23 {
+    description
+      "Renamed package to selftest
+       hniska@cisco.com";
+  }
+
   revision 2016-12-05 {
     description
       "Renamed package to selftest
@@ -111,12 +117,76 @@ module selftest {
         }
 
         leaf command {
+            when not(/ncs:devices/ncs:device[ncs:name=current()/../devices]/ncs:module[ncs:name='junos-rpc']);
             mandatory true;
             type enumeration {
               enum ping;
               enum show;
               enum copy;
               enum any;
+              enum rpc;
+            }
+        }
+
+        leaf rpc {
+            when /ncs:devices/ncs:device[ncs:name=current()/../devices]/ncs:module[ncs:name='junos-rpc'];
+            mandatory true;
+            type enumeration {
+                enum clear-bgp-neighbor;
+                enum clear-log;
+                enum file-archive;
+                enum file-compare;
+                enum file-copy;
+                enum file-delete;
+                enum file-get;
+                enum file-list;
+                enum file-put;
+                enum file-rename;
+                enum file-show;
+                enum get-bgp-neighbor-information;
+                enum get-bgp-summary-information;
+                enum get-bridge-instance-information;
+                enum get-bridge-mac-table;
+                enum get-bridge-interface-mac-table;
+                enum get-alarm-information;
+                enum get-chassis-inventory;
+                enum get-environment-information;
+                enum get-environment-re-information;
+                enum get-firmware-information;
+                enum get-fpc-information;
+                enum get-pic-detail;
+                enum get-pic-information;
+                enum get-power-usage-information;
+                enum get-interface-information;
+                enum get-isis-adjacency-information;
+                enum get-isis-hostname-information;
+                enum get-isis-interface-information;
+                enum get-isis-overview-information;
+                enum get-l2vpn-connection-information;
+                enum get-ldp-interface-information;
+                enum get-ldp-neighbor-information;
+                enum get-ldp-session-information;
+                enum get-ospf-neighbor-information;
+                enum get-route-information;
+                enum get-instance-information;
+                enum get-rsvp-interface-information;
+                enum get-rsvp-session-information;
+                enum get-service-nat-pool-information;
+                enum get-routing-task-replication-state;
+                enum get-snapshot-information;
+                enum get-software-information;
+                enum get-support-information;
+                enum get-system-alarm-information;
+                enum get-system-storage;
+                enum get-system-uptime-information;
+                enum get-system-users-information;
+                enum op-script;
+                enum ping;
+                enum request-package-add;
+                enum request-reboot;
+                enum request-system-storage-cleanup;
+                enum request-snapshot;
+                enum traceroute;
             }
         }
 
