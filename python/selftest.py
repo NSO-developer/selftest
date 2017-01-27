@@ -17,7 +17,6 @@ class RunAction(Action):
             action = ncs.maagic.get_node(trans, kp)
             self.log.info('actions: ', name)
             output.result = ''
-            time.sleep(210)
             # if we run a specific command
             if input.command:
                 run_command(action, input.command, trans, output, self)
