@@ -4,14 +4,13 @@ ifeq ($(BUILD_JOB),realhw)
 DIR = external
 endif
 
-ifeq ($(BUILD_JOB),internal_simulated)
+ifeq ($(BUILD_JOB),simulated)
 DIR = internal
 endif
 
 ifeq ($(BUILD_JOB),)
 DIR = internal
 endif
-
 
 all:
 	(cd ncs ; make all)
