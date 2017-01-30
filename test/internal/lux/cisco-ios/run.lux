@@ -1,0 +1,68 @@
+[global target_dir=../../../ncs]
+
+[shell ncs]
+    [timeout 40]
+    [progress \nStart NSO\n]
+    !cd ${target_dir}
+    !make start
+    ?SH-PROMPT:
+    !echo return value ==$$?==
+#    ?==0==
+    ?SH-PROMPT:
+    [progress \nStart NSO...ok\n]
+
+[shell ncs-cli]
+    [progress \nsync-from\n]
+    !cd ${target_dir}
+    !ncs_cli -u admin
+    ?.*>
+    !request devices sync-from
+    ?.*>
+
+#[shell top]
+#    [progress \nCreate the dummy service...\n]
+#    !ncs_load -lm ../internal/lux/cisco-ios/payloads/s1.xml
+#    ?SH-PROMPT:
+#    [progress \nCreate the dummy service...ok\n]
+
+[shell ncs-cli]
+    [timeout 40]
+    [progress \nload merge service\n]
+    !configure
+    ?.*%
+    !load merge ../internal/lux/cisco-ios/payloads/s1.xml
+    ?.*%
+    !commit
+    ?.*ommit*
+    ?.*%
+    [progress \nload merge service..ok\n]
+    !show selfservice
+    ?.*device c0
+    [progress \nVerify the service...ok\n]
+
+    [progress \nVerify that the selftests works\n]
+    !request selftest a-test execute
+    ?.*%
+    !request selftest a-test-fail execute
+    ?.*%
+    !run show selfservice a selftest-result
+    ?show-interface.*OK.*
+    ?show-interface-fail.*FAIL.*
+    [progress \nVerify that the selftests works...ok\n]
+
+[shell ncs-cli]
+    [progress \nDelete service a\n]
+    !configure
+    ?admin@ncs%
+    !delete selfservice a
+    ?admin@ncs%
+    !commit
+    ?admin@ncs%
+    [progress \nDelete service a...ok\n]
+
+[cleanup]
+    !cd ${target_dir}
+    !make stop
+    !echo ==$$?==
+    ?==0==
+    ?SH-PROMPT:

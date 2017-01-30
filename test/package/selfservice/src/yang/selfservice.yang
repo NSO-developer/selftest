@@ -1,0 +1,52 @@
+module selfservice {
+
+  namespace "http://example.com/selfservice";
+  prefix selfservice;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-common {
+    prefix tailf;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+
+  import selftest {
+    prefix selftest;
+  }
+
+  description
+    "Bla bla...";
+
+  revision 2016-01-01 {
+    description
+      "Initial revision.";
+  }
+
+  //AUGMENT_BEGIN
+  list selfservice {
+    description "This is an RFS skeleton service";
+
+    uses selftest:selftest-result;
+
+    key name;
+    leaf name {
+      tailf:info "Unique service id";
+      tailf:cli-allow-range;
+      type string;
+    }
+
+    uses ncs:service-data;
+    ncs:servicepoint selfservice-servicepoint;
+
+    // may replace this with other ways of refering to the devices.
+    leaf device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+  }
+  //AUGMENT_END
+}

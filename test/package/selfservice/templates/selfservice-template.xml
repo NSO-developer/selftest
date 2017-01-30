@@ -1,0 +1,40 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0">
+    <selftest xmlns="http://cisco.com/self-test-action">
+      <name>{/name}-test</name>
+      <service>/selfservice:selfservice[selfservice:name='{/name}']</service>
+      <commands>
+        <name>show-interface</name>
+        <devices>{/device}</devices>
+        <command>show</command>
+        <arguments>running-config interface</arguments>
+      </commands>
+    </selftest>
+    <selftest xmlns="http://cisco.com/self-test-action">
+      <name>{/name}-test-fail</name>
+      <service>/selfservice:selfservice[selfservice:name='{/name}']</service>
+      <commands>
+        <name>show-interface-fail</name>
+        <devices>{/device}</devices>
+        <command>show</command>
+        <arguments>running-config interface</arguments>
+        <failstring>shutdown</failstring>
+      </commands>
+    </selftest>
+    <selftest xmlns="http://cisco.com/self-test-action">
+      <name>{/name}-hw-test</name>
+      <service>/selfservice:selfservice[selfservice:name='{/name}']</service>
+      <commands>
+        <name>show-real-interface</name>
+        <devices>{/device}</devices>
+        <command>show</command>
+        <arguments>interface Ethernet0/0/0</arguments>
+      </commands>
+    </selftest>
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device}</name>
+      <config>
+      </config>
+    </device>
+  </devices>
+</config-template>

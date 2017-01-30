@@ -1,0 +1,3 @@
+selfservice:selfservice a {
+    selfservice:device c0;
+}

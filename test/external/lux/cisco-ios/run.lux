@@ -1,0 +1,65 @@
+[global target_dir=../../../ncs]
+
+[shell ncs]
+    [timeout 40]
+    [progress \nStart NSO\n]
+    !cd ${target_dir}
+    !make start
+    ?SH-PROMPT:
+    !echo return value ==$$?==
+#    ?==0==
+    ?SH-PROMPT:
+    [progress \nStart NSO...ok\n]
+
+[shell top]
+    [progress \nCreate the real device...\n]
+    !ncs_load -lm ../external/lux/cisco-ios/payloads/cisco-device.xml
+    ?SH-PROMPT:
+    [progress \nCreate the real device...ok\n]
+
+[shell ncs-cli]
+    [progress \nfetch ssh keys\n]
+    !cd ${target_dir}
+    !ncs_cli -u admin
+    ?.*>
+    !request devices device 1921a ssh fetch-host-keys
+    ?.*>
+
+[shell ncs-cli]
+    [timeout 40]
+    [progress \nload merge service\n]
+    !configure
+    ?.*%
+    !load merge ../external/lux/cisco-ios/payloads/s1.xml
+    ?.*%
+    !commit
+    ?.*ommit*
+    ?.*%
+    [progress \nload merge service..ok\n]
+    !show selfservice
+    ?.*device 1921a
+    [progress \nVerify the service...ok\n]
+
+    [progress \nVerify that the selftests works\n]
+    !request selftest b-hw-test execute
+    ?.*%
+    !run show selfservice b selftest-result
+    ?show-real-interface.*OK.*
+    [progress \nVerify that the selftests works...ok\n]
+
+[shell ncs-cli]
+    [progress \nDelete service b\n]
+    !configure
+    ?admin@ncs%
+    !delete selfservice b
+    ?admin@ncs%
+    !commit
+    ?admin@ncs%
+    [progress \nDelete service b...ok\n]
+
+[cleanup]
+    !cd ${target_dir}
+    !make stop
+    !echo ==$$?==
+    ?==0==
+    ?SH-PROMPT:
