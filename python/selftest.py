@@ -17,7 +17,7 @@ class RunAction(Action):
             action = ncs.maagic.get_node(trans, kp)
             self.log.info('actions: ', name)
             output.result = ''
-            time.sleep(210)
+            #time.sleep(210)
             # if we run a specific command
             if input.command:
                 run_command(action, input.command, trans, output, self)
@@ -42,13 +42,30 @@ def set_status(service, command, status):
 
 def run_command(action, cmd_string, trans, output, self):
     devices = action.commands[cmd_string].devices
-    command = action.commands[cmd_string].command
-    arguments = action.commands[cmd_string].arguments
+    #if normal live-status exec command
+    if action.commands[cmd_string].command and action.commands[cmd_string].arguments:
+        command = action.commands[cmd_string].command
+        arguments = action.commands[cmd_string].arguments
+        result = '\noutput from ' + command.string
+    else:
+        #if juniper RPC
+        print('flippin junos ' + cmd_string)
+        rpc = action.commands[cmd_string].ping
+        result = '\noutput from ' + cmd_string
     fail_regexp = action.commands[cmd_string].failstring
-    result = '\noutput from ' + command.string
+
     for device in devices:
         result += '\ndevice: ' + device + '\n'
-        result += run_livestatus_exec(device, command.string, arguments, trans, self)
+        root = ncs.maagic.get_root(trans)
+        device_module = root.ncs__devices.device[device].module
+        if 'junos-rpc' in device_module:
+            self.log.info(device, ' is a juniper-junos device')
+            # action_input = device.live_status.vrp_stats__exec[command].get_input()
+            # action_input.args = input_args
+            # output = device.live_status.vrp_stats__exec[command](action_input)
+            result += 'junos'
+        else:
+            result += run_livestatus_exec(device, command.string, arguments, trans, self)
     self.log.info('result', result)
     # ERROR means an exception was thrown. Could be that the device was down etc.
     search_result = re.search('ERROR', result)
@@ -102,11 +119,6 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
                 output = device.live_status.alu_sr_stats__exec[command](action_input)
             elif module.name == 'tailf-ned-huawei-vrp':
                 self.log.info(device_name, ' is a huawei-vrp device')
-                action_input = device.live_status.vrp_stats__exec[command].get_input()
-                action_input.args = input_args
-                output = device.live_status.vrp_stats__exec[command](action_input)
-            elif module.name == 'junos-rpc':
-                self.log.info(device_name, ' is a juniper-junos device')
                 action_input = device.live_status.vrp_stats__exec[command].get_input()
                 action_input.args = input_args
                 output = device.live_status.vrp_stats__exec[command](action_input)

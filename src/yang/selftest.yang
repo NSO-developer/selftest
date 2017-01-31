@@ -128,69 +128,192 @@ module selftest {
             }
         }
 
-        leaf rpc {
-            when /ncs:devices/ncs:device[ncs:name=current()/../devices]/ncs:module[ncs:name='junos-rpc'];
-            mandatory true;
-            type enumeration {
-                enum clear-bgp-neighbor;
-                enum clear-log;
-                enum file-archive;
-                enum file-compare;
-                enum file-copy;
-                enum file-delete;
-                enum file-get;
-                enum file-list;
-                enum file-put;
-                enum file-rename;
-                enum file-show;
-                enum get-bgp-neighbor-information;
-                enum get-bgp-summary-information;
-                enum get-bridge-instance-information;
-                enum get-bridge-mac-table;
-                enum get-bridge-interface-mac-table;
-                enum get-alarm-information;
-                enum get-chassis-inventory;
-                enum get-environment-information;
-                enum get-environment-re-information;
-                enum get-firmware-information;
-                enum get-fpc-information;
-                enum get-pic-detail;
-                enum get-pic-information;
-                enum get-power-usage-information;
-                enum get-interface-information;
-                enum get-isis-adjacency-information;
-                enum get-isis-hostname-information;
-                enum get-isis-interface-information;
-                enum get-isis-overview-information;
-                enum get-l2vpn-connection-information;
-                enum get-ldp-interface-information;
-                enum get-ldp-neighbor-information;
-                enum get-ldp-session-information;
-                enum get-ospf-neighbor-information;
-                enum get-route-information;
-                enum get-instance-information;
-                enum get-rsvp-interface-information;
-                enum get-rsvp-session-information;
-                enum get-service-nat-pool-information;
-                enum get-routing-task-replication-state;
-                enum get-snapshot-information;
-                enum get-software-information;
-                enum get-support-information;
-                enum get-system-alarm-information;
-                enum get-system-storage;
-                enum get-system-uptime-information;
-                enum get-system-users-information;
-                enum op-script;
-                enum ping;
-                enum request-package-add;
-                enum request-reboot;
-                enum request-system-storage-cleanup;
-                enum request-snapshot;
-                enum traceroute;
+        container ping {
+          when /ncs:devices/ncs:device[ncs:name=current()/../devices]/ncs:module[ncs:name='junos-rpc'];
+          description "Ping remote target";
+          container input {
+            leaf count {
+              type uint32;
+              description "Number of ping requests to send";
             }
+            leaf wait {
+              type uint32;
+              description "Maximum wait time after sending final packet";
+            }
+            leaf no-resolve {
+              type empty;
+              description "Don't attempt to print addresses symbolically";
+            }
+            leaf rapid {
+              type empty;
+              description "Send requests rapidly (default count of 5)";
+            }
+            leaf record-route {
+              type empty;
+              description "Record and report packet's path (IPv4)";
+            }
+            leaf detail {
+              type empty;
+              description "Display incoming interface of received packet";
+            }
+            leaf do-not-fragment {
+              type empty;
+              description "Don't fragment echo request packets (IPv4)";
+            }
+            leaf loose-source {
+              type string;
+              description "Intermediate loose source route entry (IPv4)";
+            }
+            leaf interface {
+              type string;
+              description "Source interface (multicast, all-ones, unrouted packets)";
+            }
+            leaf interval {
+              type uint32;
+              description "Delay between ping requests";
+            }
+            leaf source {
+              type string;
+              description "Source address of echo request";
+            }
+            leaf pattern {
+              type string;
+              description "Hexadecimal fill pattern";
+            }
+            leaf size {
+              type uint32;
+              description "Size of request packets";
+            }
+            leaf strict {
+              type empty;
+              description "Use strict source route option (IPv4)";
+            }
+            leaf strict-source {
+              type empty;
+              description "Intermediate strict source route entry (IPv4)";
+            }
+            leaf ttl {
+              type uint32;
+              description "IP time-to-live value (IPv6 hop-limit value)";
+            }
+            leaf verbose {
+              type empty;
+              description "Display detailed output";
+            }
+            leaf tos {
+              type string;
+              description "IP type-of-service value";
+            }
+            leaf bypass-routing {
+              type empty;
+              description "Bypass routing table, use specified interface";
+            }
+            leaf inet {
+              type empty;
+              description "Force ping to IPv4 destination";
+            }
+            leaf inet6 {
+              type empty;
+              description "Force ping to IPv6 destination";
+            }
+            leaf routing-instance {
+              type string;
+              description "Routing instance for ping attempt";
+            }
+            leaf mac-address {
+              type ietf:mac-address;
+              description "MAC address of the nexthop in xx:xx:xx:xx:xx:xx format";
+            }
+            leaf host {
+              type string;
+              description "Hostname or IP address of remote host";
+              mandatory true;
+            }
+            leaf logical-system {
+              type string;
+              description "Name of logical system";
+            }
+          }
+          container output {
+            container ping-results {
+              leaf target-host {
+                type string;
+              }
+              leaf target-ip {
+                type inet:ip-address;
+              }
+              leaf packet-size {
+                type uint32;
+              }
+
+              list probe-result {
+                key probe-index;
+                leaf probe-index {
+                  type uint32;
+                }
+                leaf probe-success {
+                  type empty;
+                }
+                leaf sequence-number {
+                  type uint32;
+                }
+                leaf ip-address {
+                  type inet:ip-address;
+                }
+                leaf time-to-live {
+                  type uint32;
+                }
+                leaf response-size {
+                  type uint32;
+                }
+                leaf rtt {
+                  type uint32;
+                }
+                leaf ingress-interface {
+                  type string;
+                }
+              }
+
+              container probe-results-summary {
+                leaf probes-sent {
+                  type uint32;
+                }
+                leaf responses-received {
+                  type uint32;
+                }
+                leaf packet-loss {
+                  type uint32 {
+                    range "0..100";
+                  }
+                }
+                leaf rtt-minimum {
+                  type uint32;
+                }
+                leaf rtt-maximum {
+                  type uint32;
+                }
+                leaf rtt-average {
+                  type uint32;
+                }
+                leaf rtt-stddev {
+                  type uint32;
+                }
+              }
+
+              choice ping-result {
+                leaf ping-failure {
+                  type string;
+                }
+                leaf ping-success {
+                  type empty;
+                }
+              }
+            }
+          }
         }
 
         leaf arguments {
+            when not(/ncs:devices/ncs:device[ncs:name=current()/../devices]/ncs:module[ncs:name='junos-rpc']);
             mandatory true;
             type string;
         }
