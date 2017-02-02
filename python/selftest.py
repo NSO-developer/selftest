@@ -60,10 +60,9 @@ def run_command(action, cmd_string, trans, output, self):
         device_module = root.ncs__devices.device[device].module
         if 'junos-rpc' in device_module:
             self.log.info(device, ' is a juniper-junos device')
-            # action_input = device.live_status.vrp_stats__exec[command].get_input()
-            # action_input.args = input_args
-            # output = device.live_status.vrp_stats__exec[command](action_input)
-            result += 'junos'
+            command = action.commands[cmd_string]
+            #command['ping'].input['host']
+            result += run_rpc(device, command, trans, self)
         else:
             result += run_livestatus_exec(device, command.string, arguments, trans, self)
     self.log.info('result', result)
@@ -93,6 +92,40 @@ def run_command(action, cmd_string, trans, output, self):
     output.result += result
     # return output
 
+def run_rpc(device_name, command, trans, self):
+    root = ncs.maagic.get_root(trans)
+    device = root.ncs__devices.device[device_name]
+    error_string = ''
+    #Try/catch so that it continues with all the tests even though one device is down.
+    try:
+        self.log.info(device_name, ' is a NETCONF device')
+        if command.ping.input.host:
+            input = device.rpc.jrpc__rpc_ping.ping.get_input()
+            for leaf in input.__dir__():
+                #loop through all values but dont take the system __ leafs
+                if '_' not in leaf:
+                    if command.ping.input[leaf]:
+                        input[leaf] = str(command.ping.input[leaf])
+
+            rpc_output = device.rpc.jrpc__rpc_ping.ping(input)
+            if rpc_output.ping_results.ping_success:
+                output = str(rpc_output.ping_results.target_ip) + ' ping statistics\n' + \
+                        str(rpc_output.ping_results.probe_results_summary.probes_sent) + ' packets transmitted, ' + \
+                        str(rpc_output.ping_results.probe_results_summary.responses_received) + ' packets received, ' + \
+                        str(rpc_output.ping_results.probe_results_summary.packet_loss) + ' packets lost\n' + \
+                        'round-trip avg = ' + str(rpc_output.ping_results.probe_results_summary.rtt_average)
+            else:
+                output = str(rpc_output.ping_results.target_ip) + ' ping failed'
+        else:
+            output = 'ERROR: no host value configured'
+    except Exception, e:
+        self.log.info(device_name, " ERROR: ", str(e))
+        error_string = "ERROR: " + str(e)
+    # check if its a string or an object.
+    if error_string:
+        return error_string
+    else:
+        return output
 
 def run_livestatus_exec(device_name, command, arguments, trans, self):
     root = ncs.maagic.get_root(trans)
