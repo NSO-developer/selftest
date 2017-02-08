@@ -104,7 +104,7 @@ def run_rpc(device_name, command, trans, self):
             for leaf in input.__dir__():
                 #loop through all values but dont take the system __ leafs
                 if '_' not in leaf:
-                    if command.ping.input[leaf]:
+                    if command.ping.input[leaf] and hasattr(input,leaf):
                         input[leaf] = str(command.ping.input[leaf])
 
             rpc_output = device.rpc.jrpc__rpc_ping.ping(input)
