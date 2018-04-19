@@ -96,9 +96,9 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
                 output = device.live_status.cisco_ios_xr_stats__exec[command](action_input)
             elif module.name == 'tailf-ned-alu-sr':
                 self.log.info(device_name, ' is a alu-sr device')
-                action_input = device.live_status.alu_sr_stats__exec[command].get_input()
+                action_input = device.live_status.alu_stats__exec[command].get_input()
                 action_input.args = input_args
-                output = device.live_status.alu_sr_stats__exec[command](action_input)
+                output = device.live_status.alu_stats__exec[command](action_input)
             elif module.name == 'tailf-ned-huawei-vrp':
                 self.log.info(device_name, ' is a huawei-vrp device')
                 action_input = device.live_status.vrp_stats__exec[command].get_input()

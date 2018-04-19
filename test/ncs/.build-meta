@@ -1,0 +1,5 @@
+# Meta information for the building process
+PACKAGES = huawei-vrp cisco-iosxr cisco-ios alu-sr
+GIT_PACKAGES = huawei-vrp cisco-iosxr cisco-ios alu-sr
+NCSVSNSTRICT: 4.2.2,4.3.0.2,4.4.2,4.5.1
+NCSVSN: 4.2.2,4.3.0.2,4.4.2,4.5.1

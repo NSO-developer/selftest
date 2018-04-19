@@ -1,0 +1,168 @@
+[global target_dir=../../../ncs]
+
+[shell ncs]
+    [timeout 240]
+    [progress \nStop NSO\n]
+    !make stop build
+    !echo ==$$?==
+    #?==0==
+    ?SH-PROMPT:
+    [progress \nStart NSO\n]
+    #!cd ${target_dir}
+    !make start
+    ?SH-PROMPT:
+    !echo return value ==$$?==
+#    ?==0==
+    ?SH-PROMPT:
+    [progress \nStart NSO...ok\n]
+
+[shell ncs-cli]
+    [timeout 25]
+    [progress \nsync-from\n]
+    !cd ${target_dir}
+    !ncs_cli -u admin
+    ?.*>
+    !request devices sync-from
+    ?.result true
+    ?.*>
+
+[shell ncs-cli]
+    [timeout 10]
+
+    !configure
+    ?.*%
+    [progress \nDelete leftovers\n]
+    !delete vlan
+    ?.*%
+    !commit
+    ?.*%
+    [progress \nDelete leftovers...ok\n]
+
+    [progress \nCreate cisco-ios service\n]
+    [progress \nset vlan c0 service\n]
+    !set vlan volvo device c0
+    ?\[ok
+    ?.*%
+    !commit
+    ?.*ommit*
+    ?.*%
+    [progress \nset vlan c0 service..ok\n]
+
+    [progress \nVerify the selftest\n]
+    !request selftest selftest-volvo execute command show-c0-fail
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-c0-fail result
+    ?.*result FAIL
+    ?.*%
+
+    !request selftest selftest-volvo execute command show-c0-pass
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-c0-pass result
+    ?.*result OK
+    ?.*%
+
+    [progress \nVerify the selftest...ok\n]
+    [progress \nCreate cisco-ios service..ok\n]
+
+    [progress \nCreate cisco-iosxr service\n]
+    [progress \nset vlan xr0 service\n]
+    !set vlan volvo device xr0
+    ?\[ok
+    ?.*%
+    !commit
+    ?.*ommit*
+    ?.*%
+    [progress \nset vlan xr0 service..ok\n]
+
+    [progress \nVerify the selftest\n]
+    !request selftest selftest-volvo execute command show-xr0-fail
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-xr0-fail result
+    ?.*result FAIL
+    ?.*%
+
+    !request selftest selftest-volvo execute command show-xr0-pass
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-xr0-pass result
+    ?.*result OK
+    ?.*%
+
+    [progress \nVerify the selftest...ok\n]
+    [progress \nCreate cisco-ios service..ok\n]
+
+    [progress \nCreate huawei-vrp service\n]
+    [progress \nset vlan h0 service\n]
+    !set vlan volvo device h0
+    ?\[ok
+    ?.*%
+    !commit
+    ?.*ommit*
+    ?.*%
+    [progress \nset vlan h0 service..ok\n]
+
+    [progress \nVerify the selftest\n]
+    !request selftest selftest-volvo execute command show-h0-fail
+    ?output from any
+    ?.*%
+    !run show vlan volvo selftest-result command show-h0-fail result
+    ?.*result FAIL
+    ?.*%
+
+    !request selftest selftest-volvo execute command show-h0-pass
+    ?output from any
+    ?.*%
+    !run show vlan volvo selftest-result command show-h0-pass result
+    ?.*result OK
+    ?.*%
+
+    [progress \nVerify the selftest...ok\n]
+    [progress \nCreate cisco-ios service..ok\n]
+
+    [progress \nCreate alu-sr service\n]
+    [progress \nset vlan a0 service\n]
+    !set vlan volvo device a0
+    ?\[ok
+    ?.*%
+    !commit
+    ?.*ommit*
+    ?.*%
+    [progress \nset vlan a0 service..ok\n]
+
+    [progress \nVerify the selftest\n]
+    !request selftest selftest-volvo execute command show-a0-fail
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-a0-fail result
+    ?.*result FAIL
+    ?.*%
+
+    !request selftest selftest-volvo execute command show-a0-pass
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-a0-pass result
+    ?.*result OK
+    ?.*%
+
+    [progress \nVerify the selftest...ok\n]
+    [progress \nCreate cisco-ios service..ok\n]
+
+[shell ncs-cli]
+    [progress \nDelete service volvo\n]
+    !configure
+    ?admin@ncs%
+    !delete vlan volvo
+    ?admin@ncs%
+    !commit
+    ?admin@ncs%
+    [progress \nDelete service volvo...ok\n]
+
+[cleanup]
+    !cd ${target_dir}
+    !make stop
+    !echo ==$$?==
+    ?==0==
+    ?SH-PROMPT:

@@ -1,0 +1,34 @@
+module vlan {
+  namespace "http://com/example/vlan";
+  prefix vlan;
+
+  import ietf-inet-types {
+    prefix inet;
+  }
+  import tailf-ncs {
+    prefix ncs;
+  }
+  import selftest {
+    prefix selftest;
+  }
+
+  list vlan {
+    key name;
+
+    uses ncs:service-data;
+    ncs:servicepoint "vlan";
+
+    uses selftest:selftest-result;
+
+    leaf name {
+      type string;
+    }
+
+    // may replace this with other ways of refering to the devices.
+    leaf device {
+      type leafref {
+        path "/ncs:devices/ncs:device/ncs:name";
+      }
+    }
+  }
+}

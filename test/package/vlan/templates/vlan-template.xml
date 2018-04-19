@@ -1,0 +1,46 @@
+<config-template xmlns="http://tail-f.com/ns/config/1.0" servicepoint="vlan">
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <device>
+      <name>{/device}</name>
+      <config>
+      <interface xmlns="urn:ios">
+        <FastEthernet>
+          <name>1/0</name>
+          <switchport>
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <vlans>100</vlans>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+        </FastEthernet>
+      </interface>
+
+      <interface xmlns="http://tail-f.com/ned/cisco-ios-xr">
+        <Vlan>
+          <id>100</id>
+          <switchport>
+            <mode>
+              <trunk/>
+            </mode>
+            <trunk>
+              <allowed>
+                <vlan>
+                  <all/>
+                </vlan>
+              </allowed>
+            </trunk>
+          </switchport>
+        </Vlan>
+      </interface>
+
+
+      </config>
+    </device>
+  </devices>
+</config-template>
