@@ -1,4 +1,66 @@
 <config-template xmlns="http://tail-f.com/ns/config/1.0" servicepoint="vlan">
+
+  <selftest xmlns="http://cisco.com/self-test-action">
+   <name>selftest-{/name}</name>
+   <service>/vlan:vlan[vlan:name={/name}]</service>
+   <commands when="{/device='c0'}">
+     <name>show-{/device}-fail</name>
+     <devices>{/device}</devices>
+     <command>show</command>
+     <arguments>running-config interface GigabitEthernet 0</arguments>
+     <failstring>no switchport</failstring>
+   </commands>
+   <commands when="{/device='c0'}">
+     <name>show-{/device}-pass</name>
+     <devices>{/device}</devices>
+     <command>show</command>
+     <arguments>running-config interface GigabitEthernet 0</arguments>
+     <failstring>you will not find this</failstring>
+   </commands>
+   <commands when="{/device='a0'}">
+     <name>show-a0-fail</name>
+     <devices>a0</devices>
+     <command>show</command>
+     <arguments>running-config router Base interface system</arguments>
+     <failstring>no mask-reply</failstring>
+   </commands>
+   <commands when="{/device='a0'}">
+     <name>show-a0-pass</name>
+     <devices>a0</devices>
+     <command>show</command>
+     <arguments>running-config router Base interface system</arguments>
+     <failstring>you will not find this</failstring>
+   </commands>
+   <commands when="{/device='h0'}">
+     <name>show-h0-fail</name>
+     <devices>h0</devices>
+     <command>any</command>
+     <arguments>display version</arguments>
+     <failstring>Huawei NED NETSIM</failstring>
+   </commands>
+   <commands when="{/device='h0'}">
+     <name>show-h0-pass</name>
+     <devices>h0</devices>
+     <command>any</command>
+     <arguments>display version</arguments>
+     <failstring>you will not find this</failstring>
+   </commands>
+   <commands when="{/device='xr0'}">
+     <name>show-xr0-fail</name>
+     <devices>xr0</devices>
+     <command>show</command>
+     <arguments>running-config</arguments>
+     <failstring>exit-admin-config</failstring>
+   </commands>
+   <commands when="{/device='xr0'}">
+     <name>show-xr0-pass</name>
+     <devices>xr0</devices>
+     <command>show</command>
+     <arguments>running-config</arguments>
+     <failstring>you will not find this</failstring>
+   </commands>
+  </selftest>
+
   <devices xmlns="http://tail-f.com/ns/ncs">
     <device>
       <name>{/device}</name>
