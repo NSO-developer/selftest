@@ -18,7 +18,7 @@ packages/selftest:
 		(cd packages/selftest/src; make all)
 
 packages/vlan:
-		(cd packages; ln -s ../package/vlan .)
+		(cd packages; if [ ! -L vlan ]; then ln -s ../../package/vlan .; fi)
 		(cd packages/vlan/src; make all)
 
 ncs-project:

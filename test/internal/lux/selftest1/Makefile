@@ -11,7 +11,7 @@ export TARGET_DIR=../../../ncs/
 
 .PHONY: test
 test:
-	~/stash.tail-f.com/lux/bin/lux run.lux
+	~/stash.tail-f.com/lux/bin/lux --case_timeout 900000 run.lux
 
 clean:
 	$(MAKE) -C $(TARGET_DIR) clean

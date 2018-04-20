@@ -1,12 +1,25 @@
 [global target_dir=../../../ncs]
 
 [shell ncs]
-    [timeout 240]
+    [timeout 30]
     [progress \nStop NSO\n]
-    !make stop build
+    !make stop
     !echo ==$$?==
-    #?==0==
+    ?==0==
     ?SH-PROMPT:
+    [progress \nStop NSO...ok\n]
+
+[shell ncs]
+    [timeout 900]
+    [progress \nBuild NSO\n]
+    !make build
+    !echo ==$$?==
+    ?==0==
+    ?SH-PROMPT:
+    [progress \nBuild NSO...ok\n]
+
+[shell ncs]
+    [timeout 100]
     [progress \nStart NSO\n]
     #!cd ${target_dir}
     !make start
