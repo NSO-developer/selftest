@@ -2,7 +2,7 @@
 
 This package will help you to easily create service self-test commands. It runs the commands via the live-status exec action.
 
-Today it supports ping and show commands for cisco-ios, cisco-iosxr and alu-sr.
+Today it supports ping and show commands for cisco-ios, cisco-iosxr and alu-sr (juniper example can be found in the junos branch).
 
 Short demo of it can be found at (password: aBGAd5ky): https://cisco.webex.com/ciscosales/lsr.php?RCID=1314e8a268a442f59ec72d46e95a5dcd
 
