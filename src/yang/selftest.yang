@@ -85,7 +85,7 @@ module selftest {
         tailf:actionpoint selftest;
         input {
           leaf command {
-            mandatory true;
+            //mandatory true;
             type leafref {
                 path ../../commands/name;
             }

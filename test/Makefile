@@ -19,7 +19,7 @@ DIR = internal
 JOB_DIR = simulated
 endif
 
-all: test
+all: build test
 
 clean:
 	$(MAKE) -C $(DIR) clean JOB_DIR=$(JOB_DIR) || exit 1
