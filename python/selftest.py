@@ -5,28 +5,31 @@ import _ncs
 from ncs.dp import Action
 import re
 from time import strftime
-import time
 
 
 class RunAction(Action):
     @Action.action
     def cb_action(self, uinfo, name, kp, input, output):
-        #if the your actions take more than 240 seconds, increase the action_set_timeout
-        _ncs.dp.action_set_timeout(uinfo,240)
-        with ncs.maapi.single_write_trans(uinfo.username, uinfo.context) as trans:
-            action = ncs.maagic.get_node(trans, kp)
-            self.log.info('actions: ', name)
-            output.result = ''
-            # if we run a specific command
-            if input.command:
-                run_command(action, input.command, trans, output, self)
-            else:
-                # If no command is specified we will run all the tests
-                for cmd in action.commands:
-                    run_command(action, cmd.name, trans, output, self)
-            self.log.info('commiting action: ', name)
-            trans.apply()
-            self.log.info('commiting done action: ', name)
+        # if the your actions take more than 240 seconds, increase the action_set_timeout
+        _ncs.dp.action_set_timeout(uinfo, 240)
+        #with ncs.maapi.single_write_trans(uinfo.username, uinfo.context) as trans:
+        #Changed to start_write_trans as the single_write_trans doesnt automatically
+        #handle the user groups. Big problem in a locked down system-install.
+        with ncs.maapi.Maapi() as m:
+            with m.start_write_trans(usid=uinfo.usid) as trans:
+                action = ncs.maagic.get_node(trans, kp)
+                self.log.info('actions: ', name)
+                output.result = ''
+                # if we run a specific command
+                if input.command:
+                    run_command(action, input.command, trans, output, self)
+                else:
+                    # If no command is specified we will run all the tests
+                    for cmd in action.commands:
+                        run_command(action, cmd.name, trans, output, self)
+                self.log.info('commiting action: ', name)
+                trans.apply()
+                self.log.info('commiting done action: ', name)
 
 
 def set_status(service, command, status):
@@ -82,7 +85,7 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
     input_args = arguments.split(' ')
     error_string = ''
     for module in device.module:
-        #Try/catch so that it continues with all the tests even though one device is down.
+        # Try/catch so that it continues with all the tests even though one device is down.
         try:
             if module.name == 'tailf-ned-cisco-ios':
                 self.log.info(device_name, ' is a cisco-ios device')
