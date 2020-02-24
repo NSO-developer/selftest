@@ -207,6 +207,26 @@ local-if-line-status-ce0  OK      2016-10-26 14:52:17
 local-if-line-status-ce2  FAIL    2016-10-26 14:52:18
 ```
 
+If you get something like this
+```
+ALARM bad-user-input: Resource authgroup for system doesn't exist
+```
+it is because kickers always runs as the system user and the authgroup for the device probably uses user maps.
+```
+admin@ncs% show devices authgroups
+group default {
+    umap admin {
+        remote-name     admin;
+        remote-password $9$hJ4rFQ/1FAJiiyeKqS28xPHoyDsXCebwCpcn3ASOLi4=;
+    }
+}
+admin@ncs% set devices authgroups group default
+Possible completions:
+  default-map - Remote authentication parameters for users not in umap
+  umap        - Map NCS users to remote authentication parameters
+```
+To get it working the device authgroup needs a default-map
+
 ### Contact
 
 Contact Hakan Niska <hniska@cisco.com> with any suggestions or comments. If you find any bugs please fix them and send me a pull request.

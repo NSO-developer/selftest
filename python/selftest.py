@@ -5,7 +5,7 @@ import _ncs
 from ncs.dp import Action
 import re
 from time import strftime
-
+import sys
 
 class RunAction(Action):
     @Action.action
@@ -15,7 +15,10 @@ class RunAction(Action):
         #with ncs.maapi.single_write_trans(uinfo.username, uinfo.context) as trans:
         #Changed to start_write_trans as the single_write_trans doesnt automatically
         #handle the user groups. Big problem in a locked down system-install.
+        self.log.info('PYTHON VERSION: ' + str(sys.version_info[0]))
+        #with ncs.maapi.single_write_trans('', 'system') as trans:
         with ncs.maapi.Maapi() as m:
+            #with m.attach(uinfo.actx_thandle) as trans:
             with m.start_write_trans(usid=uinfo.usid) as trans:
                 action = ncs.maagic.get_node(trans, kp)
                 self.log.info('actions: ', name)
@@ -107,7 +110,7 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
                 action_input = device.live_status.vrp_stats__exec[command].get_input()
                 action_input.args = input_args
                 output = device.live_status.vrp_stats__exec[command](action_input)
-        except Exception, e:
+        except Exception as e:
             self.log.info(device_name, " ERROR: ", str(e))
             error_string = "ERROR: " + str(e)
 

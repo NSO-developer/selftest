@@ -15,11 +15,11 @@ build: all
 
 packages/selftest:
 		(cd packages; ln -s ../../../../selftest .)
-		(cd packages/selftest/src; make all)
+		(cd packages/selftest/src; make clean all)
 
 packages/vlan:
 		(cd packages; if [ ! -L vlan ]; then ln -s ../../package/vlan .; fi)
-		(cd packages/vlan/src; make all)
+		(cd packages/vlan/src; make clean all)
 
 ncs-project:
 	ncs-project update -y

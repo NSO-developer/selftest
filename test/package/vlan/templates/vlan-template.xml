@@ -36,7 +36,7 @@
      <devices>h0</devices>
      <command>any</command>
      <arguments>display version</arguments>
-     <failstring>Huawei NED NETSIM</failstring>
+     <failstring>HUAWEI</failstring>
    </commands>
    <commands when="{/device='h0'}">
      <name>show-h0-pass</name>
