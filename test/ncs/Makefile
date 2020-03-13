@@ -6,12 +6,16 @@ include ./setup.mk
 
 .PHONY: all start stop clean db-clean
 
-all: ncs-project packages/selftest packages/vlan packages netsim
+all: ncs-project packages/selftest packages/vlan netsim packages/vlan-ned packages
 	if [ ! -d ncs-cdb ]; then mkdir ncs-cdb; fi
 	if [ ! -d init_data ]; then mkdir init_data; fi
-	cp init_data/* ncs-cdb/. > /dev/null 2>&1 || true
+	cp init_data/*.xml ncs-cdb/. > /dev/null 2>&1 || true
 
 build: all
+
+juniper:
+		ln -s $(NCS_DIR)/packages/neds/juniper-junos-nc-3.0 packages/
+		ncs-netsim add-to-network juniper-junos-nc-3.0 1 j
 
 packages/selftest:
 		(cd packages; ln -s ../../../../selftest .)
@@ -20,6 +24,14 @@ packages/selftest:
 packages/vlan:
 		(cd packages; if [ ! -L vlan ]; then ln -s ../../package/vlan .; fi)
 		(cd packages/vlan/src; make clean all)
+
+packages/vlan-ned:
+		(cd packages; ln -s ../../package/vlan-ned .)
+		(cd packages/vlan-ned/src; make clean all)
+		(ncs-netsim add-to-network packages/vlan-ned 1 v; ncs-netsim ncs-xml-init > ncs-cdb/netsim_devices_init.xml)
+		(ID=`awk '/name.*cli/{print $0}' packages/generic-ctu/package-meta-data.xml | sed 's/[ ]*<[^>]*>//g'`; \
+		sed "s/XXXX/$$ID/g" init_data/generic-ned.xml.template > ncs-cdb/generic-ned.xml)
+
 
 ncs-project:
 	ncs-project update -y

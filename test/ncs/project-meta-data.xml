@@ -31,6 +31,13 @@
       <branch>develop</branch>
     </git>
   </package>
+  <package>
+    <name>generic-ctu</name>
+    <git>
+      <repo>ssh://git@stash.tail-f.com/ned/generic-ctu.git</repo>
+      <branch>develop</branch>
+    </git>
+  </package>
 
   <netsim>
      <device>

@@ -1,1 +1,1 @@
-{"udi":{"pid":"Tailf-NSO","sn":"f75b1217-6e2f-4a2f-8510-2edc95659b75","vid":null,"suvi":null,"uuid":null,"hostIdentifier":null,"macaddress":null},"trustedStore":"./state/smartlic","url":"https://tools.cisco.com/its/service/oddce/services/DDCEService","prodUsed":true}
+{"udi":{"pid":"Tailf-NSO","sn":"92a6b958-e713-4098-9868-9e9d3a432b5a","vid":null,"suvi":null,"uuid":null,"hostIdentifier":null,"macaddress":null},"trustedStore":"./state/smartlic","eventLogPath":"./state/smartlic","url":"https://tools.cisco.com/its/service/oddce/services/DDCEService","prodUsed":true}

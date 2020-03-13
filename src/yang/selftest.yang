@@ -117,6 +117,7 @@ module selftest {
               enum show;
               enum copy;
               enum any;
+              enum nonconfig-actions;
             }
         }
 

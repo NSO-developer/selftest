@@ -1,6 +1,6 @@
 # THIS MAKFILE IS GENERATED
 
-PACKAGES = huawei-vrp cisco-iosxr cisco-ios alu-sr
+PACKAGES = huawei-vrp generic-ctu cisco-iosxr cisco-ios alu-sr
 
 NETWORK = create-network packages/cisco-iosxr 1 xr  \
           create-network packages/cisco-ios 1 c  \
