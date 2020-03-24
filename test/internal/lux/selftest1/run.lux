@@ -105,7 +105,7 @@
     ?.*%
 
     [progress \nVerify the selftest...ok\n]
-    [progress \nCreate cisco-ios service..ok\n]
+    [progress \nCreate cisco-iosxr service..ok\n]
 
     [progress \nCreate huawei-vrp service\n]
     [progress \nset vlan h0 service\n]
@@ -133,7 +133,7 @@
     ?.*%
 
     [progress \nVerify the selftest...ok\n]
-    [progress \nCreate cisco-ios service..ok\n]
+    [progress \nCreate huawei-vrp service..ok\n]
 
     [progress \nCreate alu-sr service\n]
     [progress \nset vlan a0 service\n]
@@ -161,7 +161,36 @@
     ?.*%
 
     [progress \nVerify the selftest...ok\n]
-    [progress \nCreate cisco-ios service..ok\n]
+    [progress \nCreate alu-sr service..ok\n]
+
+
+    [progress \nCreate generic-ctu service\n]
+    [progress \nset vlan c1 service\n]
+    !set vlan volvo device c1
+    ?\[ok
+    ?.*%
+    !commit
+    ?.*ommit*
+    ?.*%
+    [progress \nset vlan c1 service..ok\n]
+
+    [progress \nVerify the selftest\n]
+    !request selftest selftest-volvo execute command show-c1-fail
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-c1-fail result
+    ?.*result FAIL
+    ?.*%
+
+    !request selftest selftest-volvo execute command show-c1-pass
+    ?output from show
+    ?.*%
+    !run show vlan volvo selftest-result command show-c1-pass result
+    ?.*result OK
+    ?.*%
+
+    [progress \nVerify the selftest...ok\n]
+    [progress \nCreate generic-ctu service..ok\n]
 
 [shell ncs-cli]
     [progress \nDelete service volvo\n]

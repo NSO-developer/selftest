@@ -59,6 +59,23 @@
      <arguments>running-config</arguments>
      <failstring>you will not find this</failstring>
    </commands>
+
+   <!-- generic-ctu NED -->
+   <commands when="{/device='c1'}">
+     <name>show-{/device}-pass</name>
+     <devices>{/device}</devices>
+     <command>nonconfig-actions</command>
+     <arguments>show version</arguments>
+     <failstring>you will not find this</failstring>
+   </commands>
+   <commands when="{/device='c1'}">
+     <name>show-{/device}-pass</name>
+     <devices>{/device}</devices>
+     <command>nonconfig-actions</command>
+     <arguments>show version</arguments>
+     <failstring>NETSIM</failstring>
+   </commands>
+
   </selftest>
 
   <devices xmlns="http://tail-f.com/ns/ncs">

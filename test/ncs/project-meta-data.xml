@@ -48,7 +48,7 @@
      <device>
        <name>cisco-ios</name>
        <prefix>c</prefix>
-       <num-devices>1</num-devices>
+       <num-devices>2</num-devices>
      </device>
      <device>
        <name>huawei-vrp</name>

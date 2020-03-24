@@ -1,0 +1,44 @@
+<config xmlns="http://tail-f.com/ns/config/1.0">
+
+  <devices xmlns="http://tail-f.com/ns/ncs">
+    <global-settings>
+      <ned-settings>
+        <generic-ctu xmlns="http://tail-f.com/ned/generic-ctu/meta">
+          <rpc-actions>
+            <expect-patterns>
+              <pattern>\A[^#]*#\Z</pattern>
+            </expect-patterns>
+            <expect-patterns>
+              <pattern>\A[^#]*#\s\Z</pattern>
+            </expect-patterns>
+            <expect-patterns>
+              <pattern>\A[^>]*>\Z</pattern>
+            </expect-patterns>
+            <expect-patterns>
+              <pattern>\A[^>]*>\s\Z</pattern>
+            </expect-patterns>
+            <device-mapping>
+              <device-id>c1</device-id>
+              <ned>vlan-ned</ned>
+            </device-mapping>
+          </rpc-actions>
+        </generic-ctu>
+      </ned-settings>
+    </global-settings>
+
+    <device>
+      <name>c1</name>
+      <live-status-protocol>
+        <name>generic-cli</name>
+        <port>10026</port>
+        <authgroup>default</authgroup>
+        <device-type>
+          <cli>
+            <ned-id xmlns:XXXX="http://tail-f.com/ns/ned-id/XXXX">XXXX:XXXX</ned-id>
+          </cli>
+        </device-type>
+      </live-status-protocol>
+    </device>
+
+  </devices>
+</config>

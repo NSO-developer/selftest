@@ -6,10 +6,12 @@ include ./setup.mk
 
 .PHONY: all start stop clean db-clean
 
-all: ncs-project packages/selftest packages/vlan netsim packages/vlan-ned packages
+all: ncs-project packages/selftest packages/vlan packages netsim
 	if [ ! -d ncs-cdb ]; then mkdir ncs-cdb; fi
 	if [ ! -d init_data ]; then mkdir init_data; fi
 	cp init_data/*.xml ncs-cdb/. > /dev/null 2>&1 || true
+	(ID=`awk '/name.*cli/{print $0}' packages/generic-ctu/package-meta-data.xml | sed 's/[ ]*<[^>]*>//g'`; \
+	sed "s/XXXX/$$ID/g" init_data/generic-ned.xml.template > ncs-cdb/generic-ned.xml)
 
 build: all
 
@@ -30,7 +32,7 @@ packages/vlan-ned:
 		(cd packages/vlan-ned/src; make clean all)
 		(ncs-netsim add-to-network packages/vlan-ned 1 v; ncs-netsim ncs-xml-init > ncs-cdb/netsim_devices_init.xml)
 		(ID=`awk '/name.*cli/{print $0}' packages/generic-ctu/package-meta-data.xml | sed 's/[ ]*<[^>]*>//g'`; \
-		sed "s/XXXX/$$ID/g" init_data/generic-ned.xml.template > ncs-cdb/generic-ned.xml)
+
 
 
 ncs-project:
