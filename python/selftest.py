@@ -87,38 +87,38 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
     device = root.ncs__devices.device[device_name]
     input_args = arguments.split(' ')
     error_string = ''
-    for module in device.live_status.yanglib__modules_state.module:
+    #for module in device.live_status.yanglib__modules_state.module:
         # Try/catch so that it continues with all the tests even though one device is down.
-        try:
-            if ('tailf-ned-generic-ctu-stats', '') in device.live_status.yanglib__modules_state.module:
-                self.log.info(device_name, ' is a generic-ctu device')
-                action_input = device.live_status.generic_ctu_stats__exec['nonconfig-actions'].get_input()
-                action_input.action.create(arguments)
-                output = action_input = device.live_status.generic_ctu_stats__exec.nonconfig_actions(action_input)
-            elif ('tailf-ned-cisco-ios-xr-stats', '') in device.live_status.yanglib__modules_state.module:
-                self.log.info(device_name, ' is a cisco-iosxr device')
-                action_input = device.live_status.cisco_ios_xr_stats__exec[command].get_input()
-                action_input.args = input_args
-                output = device.live_status.cisco_ios_xr_stats__exec[command](action_input)
-            elif ('tailf-ned-alu-sr-stats', '') in device.live_status.yanglib__modules_state.module:
-                self.log.info(device_name, ' is a alu-sr device')
-                action_input = device.live_status.alu_stats__exec[command].get_input()
-                action_input.args = input_args
-                output = device.live_status.alu_stats__exec[command](action_input)
-            elif ('tailf-ned-huawei-vrp-stats', '') in device.live_status.yanglib__modules_state.module:
-                self.log.info(device_name, ' is a huawei-vrp device')
-                action_input = device.live_status.vrp_stats__exec[command].get_input()
-                action_input.args = input_args
-                output = device.live_status.vrp_stats__exec[command](action_input)
-            elif ('tailf-ned-cisco-ios-stats', '') in device.live_status.yanglib__modules_state.module:
-                self.log.info(device_name, ' is a cisco-ios device')
-                action_input = device.live_status.ios_stats__exec[command].get_input()
-                action_input.args = input_args
-                output = device.live_status.ios_stats__exec[command](action_input)
+    try:
+        if ('tailf-ned-generic-ctu-stats', '') in device.live_status.yanglib__modules_state.module:
+            self.log.info(device_name, ' is a generic-ctu device')
+            action_input = device.live_status.generic_ctu_stats__exec['nonconfig-actions'].get_input()
+            action_input.action.create(arguments)
+            output = action_input = device.live_status.generic_ctu_stats__exec.nonconfig_actions(action_input)
+        elif ('tailf-ned-cisco-ios-xr-stats', '') in device.live_status.yanglib__modules_state.module:
+            self.log.info(device_name, ' is a cisco-iosxr device')
+            action_input = device.live_status.cisco_ios_xr_stats__exec[command].get_input()
+            action_input.args = input_args
+            output = device.live_status.cisco_ios_xr_stats__exec[command](action_input)
+        elif ('tailf-ned-alu-sr-stats', '') in device.live_status.yanglib__modules_state.module:
+            self.log.info(device_name, ' is a alu-sr device')
+            action_input = device.live_status.alu_stats__exec[command].get_input()
+            action_input.args = input_args
+            output = device.live_status.alu_stats__exec[command](action_input)
+        elif ('tailf-ned-huawei-vrp-stats', '') in device.live_status.yanglib__modules_state.module:
+            self.log.info(device_name, ' is a huawei-vrp device')
+            action_input = device.live_status.vrp_stats__exec[command].get_input()
+            action_input.args = input_args
+            output = device.live_status.vrp_stats__exec[command](action_input)
+        elif ('tailf-ned-cisco-ios-stats', '') in device.live_status.yanglib__modules_state.module:
+            self.log.info(device_name, ' is a cisco-ios device')
+            action_input = device.live_status.ios_stats__exec[command].get_input()
+            action_input.args = input_args
+            output = device.live_status.ios_stats__exec[command](action_input)
 
-        except Exception as e:
-            self.log.info(device_name, " ERROR: ", str(e))
-            error_string = "ERROR: " + str(e)
+    except Exception as e:
+        self.log.info(device_name, " ERROR: ", str(e))
+        error_string = "ERROR: " + str(e)
 
     # check if its a string or an object.
     if error_string:
