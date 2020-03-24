@@ -87,8 +87,7 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
     device = root.ncs__devices.device[device_name]
     input_args = arguments.split(' ')
     error_string = ''
-    #for module in device.live_status.yanglib__modules_state.module:
-        # Try/catch so that it continues with all the tests even though one device is down.
+    # Try/catch so that it continues with all the tests even though one device is down.
     try:
         if ('tailf-ned-generic-ctu-stats', '') in device.live_status.yanglib__modules_state.module:
             self.log.info(device_name, ' is a generic-ctu device')
