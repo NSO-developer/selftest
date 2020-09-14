@@ -3,7 +3,7 @@
 PACKAGES = huawei-vrp generic-ctu cisco-iosxr cisco-ios alu-sr
 
 NETWORK = create-network packages/cisco-iosxr 1 xr  \
-          create-network packages/cisco-ios 1 c  \
+          create-network packages/cisco-ios 2 c  \
           create-network packages/huawei-vrp 1 h  \
           create-network packages/alu-sr 1 a 
 

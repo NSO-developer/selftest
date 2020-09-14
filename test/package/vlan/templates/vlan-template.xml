@@ -69,7 +69,7 @@
      <failstring>you will not find this</failstring>
    </commands>
    <commands when="{/device='c1'}">
-     <name>show-{/device}-pass</name>
+     <name>show-{/device}-fail</name>
      <devices>{/device}</devices>
      <command>nonconfig-actions</command>
      <arguments>show version</arguments>

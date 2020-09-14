@@ -16,7 +16,6 @@ class RunAction(Action):
         #Changed to start_write_trans as the single_write_trans doesnt automatically
         #handle the user groups. Big problem in a locked down system-install.
         self.log.info('PYTHON VERSION: ' + str(sys.version_info[0]))
-        #with ncs.maapi.single_write_trans('', 'system') as trans:
         with ncs.maapi.Maapi() as m:
             #with m.attach(uinfo.actx_thandle) as trans:
             with m.start_write_trans(usid=uinfo.usid) as trans:

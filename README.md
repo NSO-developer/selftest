@@ -4,8 +4,6 @@ This package will help you to easily create service self-test commands. It runs 
 
 Today it supports ping and show commands for cisco-ios, cisco-iosxr and alu-sr (juniper example can be found in the junos branch).
 
-Short demo of it can be found at (password: aBGAd5ky): https://cisco.webex.com/ciscosales/lsr.php?RCID=1314e8a268a442f59ec72d46e95a5dcd
-
 An example could be to show some interface status and see if it is up or down, or maybe ping between CPE:s to check VPN connectivity.
 
 ##### Example

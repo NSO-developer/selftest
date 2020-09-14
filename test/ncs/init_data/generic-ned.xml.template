@@ -19,7 +19,7 @@
             </expect-patterns>
             <device-mapping>
               <device-id>c1</device-id>
-              <ned>vlan-ned</ned>
+              <ned>cisco-ios</ned>
             </device-mapping>
           </rpc-actions>
         </generic-ctu>
@@ -30,7 +30,7 @@
       <name>c1</name>
       <live-status-protocol>
         <name>generic-cli</name>
-        <port>10026</port>
+        <port>10024</port>
         <authgroup>default</authgroup>
         <device-type>
           <cli>
