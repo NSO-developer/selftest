@@ -113,7 +113,18 @@ def run_livestatus_exec(device_name, command, arguments, trans, self):
             action_input = device.live_status.ios_stats__exec[command].get_input()
             action_input.args = input_args
             output = device.live_status.ios_stats__exec[command](action_input)
-
+        elif ('tailf-ned-cisco-nx-stats', '') in device.live_status.yanglib__modules_state.module:
+            self.log.info(device_name, ' is a cisco-nx device')
+            action_input = device.live_status.nx_stats__exec[command].get_input()
+            action_input.args = input_args
+            output = device.live_status.nx_stats__exec[command](action_input)
+        elif ('tailf-ned-cisco-asa-stats', '') in device.live_status.yanglib__modules_state.module:
+            self.log.info(device_name, ' is a cisco-asa device')
+            action_input = device.live_status.asa_stats__exec[command].get_input()
+            action_input.args = input_args
+            output = device.live_status.asa_stats__exec[command](action_input)
+            
+            
     except Exception as e:
         self.log.info(device_name, " ERROR: ", str(e))
         error_string = "ERROR: " + str(e)
